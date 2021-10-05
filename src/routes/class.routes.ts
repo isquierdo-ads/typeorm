@@ -1,6 +1,7 @@
 import { Router } from 'express'
-import { getRepository } from 'typeorm'
+import { getCustomRepository, getRepository } from 'typeorm'
 import CharClass from '../models/CharClass'
+import { CharClassRepository } from '../repositories/CharClassRepository'
 const classRouter = Router()
 
 classRouter.post('/', async (req, res) => {
@@ -23,6 +24,16 @@ classRouter.get('/', async (req, res) => {
 
     } catch (error) {
         console.log(error)
+    }
+})
+
+classRouter.get('/:name', async (req,res) => {
+    const repo = getCustomRepository(CharClassRepository);
+    const charclass = await repo.findByName(req.params.name)
+    if (charclass.length !== 0){
+        return res.json(charclass)
+    } else {
+        return res.json(`Classe ${req.params.name} não encontrada`)
     }
 })
 
