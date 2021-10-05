@@ -1,10 +1,10 @@
 {
   "type": "postgres",
-  "host": "172.17.0.3",
-  "port": 5432,
+  "host": "localhost",
+  "port": 5433,
   "username": "postgres",
   "password": "1234",
-  "database": "trabalho",
+  "database": "postgres",
   "synchronize": true,
   "logging": false,
   "entities": ["src/models/**/*.ts"],
