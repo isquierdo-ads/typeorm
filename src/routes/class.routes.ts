@@ -37,4 +37,39 @@ classRouter.get('/:name', async (req,res) => {
     }
 })
 
+classRouter.delete('/:id', async (req, res) => {
+    const paramsID = +req.params.id;
+    try {
+      const repo = await getRepository(CharClass);
+      const classFound = repo.findOne({
+        where: { id: paramsID },
+      });
+      if (!classFound) {
+        return res.status(400).json('Classe não encontrada');
+      }
+      const response = await repo.delete({ id: paramsID });
+      return res.status(204).json(response);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+  
+  classRouter.put('/:id/:newName', async (req, res) => {
+    const paramsID = +req.params.id;
+    const newName = req.params.newName;
+    try {
+      const repo = await getRepository(CharClass).findOne({
+        where: { id: paramsID },
+      });
+      if (repo) {
+        repo.name = newName;
+        res.status(200).json(repo);
+      } else {
+        return res.status(400).json('Classe não encontrada');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+  
 export default classRouter;
