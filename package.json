@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@types/node": "^14.0.5",
+    "class-validator": "^0.13.1",
     "express": "^4.17.1",
     "pg": "^8.2.1",
     "reflect-metadata": "^0.1.13",

@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from "typeorm";
+import Player from "./Player";
 
 @Entity()
 class CharClass {
@@ -16,6 +17,12 @@ class CharClass {
 
     @Column()
     vit: number;
+
+
+    @ManyToOne(() => Player, player => player.charClass)
+    player: Player;
+
 }
 
 export default CharClass
+
