@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getCustomRepository, getRepository } from 'typeorm'
+import { getConnection, getCustomRepository, getRepository } from 'typeorm'
 import CharClass from '../models/CharClass'
 import { CharClassRepository } from '../repositories/CharClassRepository'
 const classRouter = Router()
@@ -8,6 +8,7 @@ classRouter.post('/', async (req, res) => {
   try {
     const repo = getRepository(CharClass)
     const response = await repo.save(req.body);
+    await getConnection().queryResultCache?.remove(['listClass']);
     return res.status(201).json(response)
   }
   catch (error) {
@@ -17,8 +18,11 @@ classRouter.post('/', async (req, res) => {
 
 classRouter.get('/', async (req, res) => {
   console.log('get class')
+
   try {
-    const repo = await getRepository(CharClass).find()
+    const repo = await getRepository(CharClass).find({
+      cache: { id: 'listClass', milliseconds: 10000 }
+    });
     return res.status(200).json(repo)
 
   } catch (error) {

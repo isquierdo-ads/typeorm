@@ -1,13 +1,13 @@
 import { Router } from 'express'
-import { getCustomRepository, getRepository } from 'typeorm'
+import { getConnection, getCustomRepository, getRepository } from 'typeorm'
 import Player from '../models/Player'
 const playerRouter = Router()
 
 playerRouter.post('/', async (req, res) => {
-  console.log(req.body)
   try {
     const repo = getRepository(Player)
     const response = await repo.save(req.body);
+    await getConnection().queryResultCache?.remove(['listPlayer']);
     return res.status(201).json(response)
   }
   catch (error) {
@@ -16,10 +16,10 @@ playerRouter.post('/', async (req, res) => {
 })
 
 playerRouter.get('/', async (req, res) => {
-  console.log('get player')
   try {
-    const repo = await getRepository(Player).find()
-    console.log(repo)
+    const repo = await getRepository(Player).find({
+      cache: { id: 'listPlayer', milliseconds: 10000 }
+    });
 
     return res.status(200).json(repo)
 

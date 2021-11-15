@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { MyCrypto } from "../helpers/crypto";
 import CharClass from "./CharClass";
 import { CharRace } from "./CharRace";
 @Entity()
@@ -6,7 +7,11 @@ class Player {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({
+        type: 'varchar',
+        nullable: false,
+        transformer: MyCrypto,
+    })
     name: string;
 
     @Column()
